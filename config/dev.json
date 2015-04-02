@@ -1,0 +1,10 @@
+{
+  "port": 10002,
+  "mongo" : {
+    "host": "nj1qvlcmmdb01",
+    "port": "27017",
+    "username": "",
+    "password": "",
+    "database": "testdatabase"
+  }
+}
