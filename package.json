@@ -13,6 +13,8 @@
     "htmlmin": "0.0.2",
     "jade": "*",
     "mongoose": "^4.0.1",
-    "request": "^2.36.0"
+    "query-string": "^1.0.0",
+    "request": "^2.36.0",
+    "twitter": "^1.2.5"
   }
 }

@@ -22,7 +22,7 @@ app.all '*', (req, res, next) ->
   res.header "Access-Control-Allow-Credentials", "true"
   next()
 
-app.get "/birdie/rest/topics/:searchQuery", (req, res, next) ->
+app.get "/birdie/rest/topics", (req, res, next) ->
   mainController.getTopics req, res, next
 
 app.post "/birdie/rest/topics", (req, res, next) ->
