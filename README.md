@@ -19,16 +19,18 @@ My basic Node Server for use In projects
 
  - Creating New Topics: POST to http://localhost:10002/birdie/rest/topics
   > Pass an object with the information you'd like to save about the topic like so:
-    {
+
+  > {
       "events": null,
       "name": "Sweet Dreams",
       "isPromoted": null,
       "query": "%22Sweet%20Dreams%22",
       "url": "http://twitter.com/search/?q=%22Sweet%20Dreams%22"
     }
+
   > Every field except the name field is optional...
 
 - Deleting Topics: DELETE to http://localhost:10002/birdie/rest/topics
   > You can pass a query in the body that looks like {"query": "randomWordsAreCool"} which will be used to search the DB
-  
+
   > If no query is sent then all topics will be removed from the DB
