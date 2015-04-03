@@ -18,7 +18,7 @@ My basic Node Server for use In projects
   > Keep in mind the search currently only looks at topic names!
 
  - Creating New Topics: POST to http://localhost:10002/birdie/rest/topics
-  > Pass an object with the information you'd like to save about the topic like so:
+  > You can send a simple json body like below to save a new topic:
 
   > {
       "events": null,
