@@ -30,4 +30,5 @@ My basic Node Server for use In projects
 
 - Deleting Topics: DELETE to http://localhost:10002/birdie/rest/topics
   > You can pass a query in the body that looks like {"query": "randomWordsAreCool"} which will be used to search the DB
+  
   > If no query is sent then all topics will be removed from the DB
