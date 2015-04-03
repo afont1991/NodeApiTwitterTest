@@ -6,8 +6,8 @@ My basic Node Server for use In projects
 
 ## Running
 
-- npm install
 - Run 'mongod' (make sure you have mongoDB installed!)
+- npm install
 - Run 'coffee index.coffee' (You made need to install coffee script "npm install -g coffee-script")
 
 ## Using the API
