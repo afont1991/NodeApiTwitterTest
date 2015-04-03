@@ -78,7 +78,6 @@ exports.deleteTopic = (req, res, next) ->
   if req.body.query
     topicModel.find({ name: new RegExp('^'+req.body.query, 'i') }).remove (err) ->
       return res.json "Error occured: " + err if err
-      console.log topics
       res.json "Topics matching query removed"
   else
     console.log "No query passed deleting all topics!"
