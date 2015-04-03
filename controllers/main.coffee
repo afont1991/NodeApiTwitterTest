@@ -7,9 +7,10 @@ Twitter = require('twitter') #Simple npm Module for making request to twitter
 topicModel = require('../models/topicModel').Topic
 
 
-mongoose.connect('mongodb://localhost/nodeServerTest');
+mongoose.connect(config.mongoURL);
 
 #Setting up my twitter client to send request
+#Due to issues with creating my account i have the credentials empty
 twitterClient = new Twitter (
   consumer_key: ''
   consumer_secret: ''
@@ -17,30 +18,19 @@ twitterClient = new Twitter (
   access_token_secret: ''
 )
 
-params = id: 1
 
-twitterClient.get 'trends/place.json', params, (error, tweets, response) ->
-  if !error
-    console.log tweets
-  return
-
-
-
+# Right now this is limited to only searching by name..
 exports.getTopics = (req, res, next) ->
   if req._parsedUrl.query
-    console.log 'searching'
     query = req._parsedUrl.query
     parsedQuery = queryString.parse(query)
-    console.log parsedQuery.query
-    topicModel.find { name: new RegExp('^' + parsedQuery.query + '$', 'i') }, (err, topics) ->
-      console.log err if err
-      console.log topics
-      res.json "it worked?"
+    topicModel.find { name: new RegExp('^'+parsedQuery.query, 'i') }, (err, topics) ->
+      return res.json "Error occured: " + err if err
+      res.json topics
   else
     topicModel.find query?, (err, topics) ->
-      console.log err if err
-      console.log topics
-      res.json "it worked"
+      return res.json "Error occured: " + err if err
+      res.json topics
 
 exports.addTopic = (req, res, next) ->
   newTopic = new topicModel
@@ -57,11 +47,45 @@ exports.addTopic = (req, res, next) ->
 
     res.json "Topic Saved"
 
+
 exports.reloadTopics = (req, res, next) ->
-  res.json "it worked"
+  # Remove exisiting topics before loading new ones
+  topicModel.remove (err, topics) ->
+    params = id: 1
+    twitterClient.get 'trends/place.json', params, (error, tweets, response) ->
+
+      if error
+        console.log '~|Loading fake data in place of twitter!|~'
+        trendingTopics = config.fakeTwitterData[0].trends #the fake config data is identical to the twitter api response
+      else
+        trendingTopics = response[0].trends
+
+      for topic in trendingTopics
+
+        newTopic = new topicModel
+        newTopic.events = topic.events
+        newTopic.name = topic.name
+        newTopic.isPromoted = topic.promoted_content
+        newTopic.query = topic.query
+        newTopic.url = topic.url
+
+        newTopic.save (err, savedTopic) ->
+          return err if err
+
+      res.json "Data Reloaded"
 
 exports.deleteTopic = (req, res, next) ->
-  res.json "it worked"
+  if req.body.query
+    topicModel.find({ name: new RegExp('^'+req.body.query, 'i') }).remove (err) ->
+      return res.json "Error occured: " + err if err
+      console.log topics
+      res.json "Topics matching query removed"
+  else
+    console.log "No query passed deleting all topics!"
+    topicModel.remove (err, topics) ->
+      return res.json "Error occured: " + err if err
+      topics.remove
+      res.json "Topics removed"
 
 
 
