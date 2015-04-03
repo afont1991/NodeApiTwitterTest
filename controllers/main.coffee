@@ -33,10 +33,11 @@ exports.getTopics = (req, res, next) ->
       res.json topics
 
 exports.addTopic = (req, res, next) ->
+  return res.json "Please Include a name!" if !req.body.name
   newTopic = new topicModel
 
   newTopic.events = req.body.events if req.body.events
-  newTopic.name = req.body.name if req.body.name
+  newTopic.name = req.body.name
   newTopic.isPromoted = req.body.isPromoted if req.body.isPromoted
   newTopic.query = req.body.query if req.body.query
   newTopic.url = req.body.url if req.body.url
@@ -47,7 +48,7 @@ exports.addTopic = (req, res, next) ->
 
     res.json "Topic Saved"
 
-
+#Deletes exisiting data and adds a new set of trending topics
 exports.reloadTopics = (req, res, next) ->
   # Remove exisiting topics before loading new ones
   topicModel.remove (err, topics) ->
@@ -74,6 +75,7 @@ exports.reloadTopics = (req, res, next) ->
 
       res.json "Data Reloaded"
 
+#This will either find all topics matching your query (same as the get call above) or deletes all topics if no query supplied...
 exports.deleteTopic = (req, res, next) ->
   if req.body.query
     topicModel.find({ name: new RegExp('^'+req.body.query, 'i') }).remove (err) ->
